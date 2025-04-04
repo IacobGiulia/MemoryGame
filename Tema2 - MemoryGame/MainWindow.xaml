@@ -8,11 +8,10 @@
         Title="Sign In" Height="675" Width="912">
     <Grid Height="675" VerticalAlignment="Top" HorizontalAlignment="Center" Width="912" RenderTransformOrigin="0.498,0.455">
         <TextBlock HorizontalAlignment="Left" Margin="127,45,0,0" TextWrapping="Wrap" Text="Welcome to Memory Game ! Enjoy !" VerticalAlignment="Top" Height="59" Width="652" FontSize="36" TextAlignment="Center" FontFamily="Kristen ITC"/>
-        <TextBlock HorizontalAlignment="Left" Margin="73,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="383" Width="289"/>
-        <Button Content="New User" HorizontalAlignment="Left" Margin="73,563,0,0" VerticalAlignment="Top" Height="39" Width="81" FontSize="14"/>
-        <Button Content="Delete User" HorizontalAlignment="Left" Margin="282,563,0,0" VerticalAlignment="Top" Height="39" Width="80" FontSize="14"/>
-        <Button Content="Exit" HorizontalAlignment="Left" Margin="765,563,0,0" VerticalAlignment="Top" Height="39" Width="81" FontSize="14" Command="{Binding ExitCommand}"/>
-        <Button Content="Play" HorizontalAlignment="Left" Margin="548,563,0,0" VerticalAlignment="Top" Height="39" Width="81" FontSize="14"/>
+        <Button Content="New User" HorizontalAlignment="Left" Margin="73,563,0,0" VerticalAlignment="Top" Height="39" Width="81" FontSize="14" Command="{Binding AddUserCommand}"/>
+        <Button Content="Delete User" HorizontalAlignment="Left" Margin="282,563,0,0" VerticalAlignment="Top" Height="39" Width="80" FontSize="14" Command="{Binding DeleteUserCommand}" IsEnabled="{Binding SelectedUser, Converter={StaticResource NullToBoolConverter}}"/>
+        <Button Content="Exit" HorizontalAlignment="Left" Margin="765,563,0,0" VerticalAlignment="Top" Height="39" Width="81" FontSize="14" Command="{Binding ExitGameCommand}"/>
+        <Button Content="Play" HorizontalAlignment="Left" Margin="548,563,0,0" VerticalAlignment="Top" Height="39" Width="81" FontSize="14" Command="{Binding PlayCommand}" IsEnabled="{Binding SelectedUser, Converter={StaticResource NullToBoolConverter}}"/>
         <Image HorizontalAlignment="Left" Height="185" Margin="588,146,0,0" VerticalAlignment="Top" Width="191" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
@@ -25,5 +24,6 @@
         </Image>
         <Button Content="&gt;&gt;" HorizontalAlignment="Left" Margin="734,376,0,0" VerticalAlignment="Top" Height="29" FontSize="18" Width="45"/>
         <Button Content="&lt;&lt;" HorizontalAlignment="Left" Margin="588,376,0,0" VerticalAlignment="Top" Height="29" FontSize="18" Width="45"/>
+        <ListBox ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" DisplayMemberPath="Username" Margin="73,146,550,180"/>
     </Grid>
 </Window>

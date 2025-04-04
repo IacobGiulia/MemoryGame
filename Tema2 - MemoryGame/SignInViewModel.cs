@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace Tema2___MemoryGame
 {
-    public class SignInViewModel
+    public class SignInViewModel : MainViewModel
     {
         private const string UsersFile = "user.json";
         public ObservableCollection<UserModel> Users { get; set; } = new();
@@ -22,6 +22,8 @@ namespace Tema2___MemoryGame
         public ICommand DeleteUserCommand { get; }
         public ICommand PlayCommand { get; }
 
+        public ICommand ExitGameCommand { get; }
+
         public SignInViewModel()
         {
             LoadUsers();
@@ -29,6 +31,7 @@ namespace Tema2___MemoryGame
             AddUserCommand = new RelayCommand(AddUser);
             DeleteUserCommand = new RelayCommand(DeleteUser, CanModifyUser);
             PlayCommand = new RelayCommand(Play, CanModifyUser);
+            ExitGameCommand = new RelayCommand(ExitApp);
 
         }
 
@@ -88,6 +91,11 @@ namespace Tema2___MemoryGame
         private void Play(object obj)
         {
             MessageBox.Show($"User {SelectedUser.Username} is playing!");
+        }
+
+        private void ExitApp(object obj)
+        {
+            Application.Current.Shutdown();
         }
 
         private bool CanModifyUser(object obj) => SelectedUser != null;

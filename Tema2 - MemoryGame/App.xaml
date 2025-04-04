@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Tema2___MemoryGame"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:NullToBoolConverter x:Key="NullToBoolConverter"/>
     </Application.Resources>
 </Application>
