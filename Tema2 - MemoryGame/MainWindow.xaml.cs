@@ -22,5 +22,15 @@ public partial class MainWindow : Window
         DataContext = new SignInViewModel();
     }
 
+    private void NewUserButton_Click(object sender, RoutedEventArgs e)
+    {
+        var viewModel = this.DataContext as SignInViewModel;
+        var newUserWindow = new NewUserWindow();
+        newUserWindow.UserAdded += (s, args) =>
+        {
+            viewModel.LoadUsers(); // reîncarcă lista după ce se adaugă
+        };
+        newUserWindow.ShowDialog();
+    }
 
 }
