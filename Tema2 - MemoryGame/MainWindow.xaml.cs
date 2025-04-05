@@ -19,7 +19,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        DataContext = new SignInViewModel();
+        DataContext = new SignInViewModel(this);
     }
 
     private void NewUserButton_Click(object sender, RoutedEventArgs e)

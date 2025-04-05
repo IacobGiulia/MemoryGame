@@ -25,7 +25,7 @@ namespace Tema2___MemoryGame
             InitializeComponent();
         }
 
-        private void AddUserButton_Click(object sender, RoutedEventArgs e)
+        public void AddUserButton_Click(object sender, RoutedEventArgs e)
         {
 
             UserAdded?.Invoke(this, EventArgs.Empty);

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,10 @@ namespace Tema2___MemoryGame
     {
         private const string UsersFile = "users.json";
         public ObservableCollection<UserModel> Users { get; set; } = new();
-        public UserModel SelectedUser { get; set; }
+        public event EventHandler UserAdded;
+
+        public Window _currentWindow;
+        
 
         public ICommand AddUserCommand { get; }
         public ICommand DeleteUserCommand { get; }
@@ -25,7 +29,27 @@ namespace Tema2___MemoryGame
         public ICommand ExitGameCommand { get; }
         public ICommand NewUserCommand { get; }
 
-        public SignInViewModel()
+        private UserModel _selectedUser;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public UserModel SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                if (_selectedUser != value)
+                {
+                    _selectedUser = value;
+                    OnPropertyChanged(nameof(SelectedUser)); // Notifică UI-ul că s-a schimbat SelectedUser
+                                                             // Actualizează starea butoanelor
+                    (DeleteUserCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                    (PlayCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public SignInViewModel(Window currentWindow)
         {
             LoadUsers();
 
@@ -34,15 +58,17 @@ namespace Tema2___MemoryGame
             PlayCommand = new RelayCommand(Play, CanModifyUser);
             ExitGameCommand = new RelayCommand(ExitApp);
             NewUserCommand = new RelayCommand(_ => OpenNewUserWindow());
-
+            _currentWindow = currentWindow;
         }
 
-        private void OpenNewUserWindow()
+        public void OpenNewUserWindow()
         {
             var window = new NewUserWindow();
             window.UserAdded += (s, e) => LoadUsers(); // 🟢 ADĂUGĂ AICI
             window.DataContext = new NewUserViewModel(window);
             window.ShowDialog();
+
+
         }
         public void LoadUsers()
         {
@@ -106,6 +132,11 @@ namespace Tema2___MemoryGame
         private void Play(object obj)
         {
             MessageBox.Show($"User {SelectedUser.Username} is playing!");
+
+            var playWindow = new PlayWindow(SelectedUser);
+            playWindow.Show();
+            _currentWindow.Close();
+            
         }
 
         private void ExitApp(object obj)

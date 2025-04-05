@@ -15,7 +15,7 @@ namespace Tema2___MemoryGame
     class NewUserViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
+        public event EventHandler UserAdded;
         private string _username;
         private string _imagePath;
 
@@ -85,6 +85,8 @@ namespace Tema2___MemoryGame
                 File.WriteAllText(usersFile, serialized);
 
                 MessageBox.Show("User created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                UserAdded?.Invoke(this, EventArgs.Empty);
 
                 _window.Close();
             }
