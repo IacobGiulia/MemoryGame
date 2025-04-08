@@ -5,28 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tema2___MemoryGame"
         mc:Ignorable="d"
-        Title="GameWindow" Height="1014" Width="696">
-    <Grid Margin="0,0,10,68">
-        <!-- Adăugăm un ItemsControl pentru a itera prin carduri -->
-        <ItemsControl ItemsSource="{Binding Cards}">
+        Title="GameWindow" Height="700" Width="800">
+
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Text pentru a arăta timpul rămas și statutul jocului -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,10">
+            <TextBlock HorizontalAlignment="Center" FontSize="20" Text="{Binding TimerText}" />
+            <TextBlock HorizontalAlignment="Center" FontSize="20" Text="{Binding GameStatus}" />
+        </StackPanel>
+
+        <!-- Grid pentru carțile de joc -->
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Cards}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="4" Rows="4" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Image HorizontalAlignment="Left" Height="150" Width="138"
-                           VerticalAlignment="Top" Margin="{Binding Margin}" 
-                           Source="{Binding ImagePath}">
-                        <!-- Evenimentul de click pe card -->
-                        <Image.InputBindings>
-                            <MouseBinding MouseAction="LeftClick" Command="{Binding DataContext.CardClickCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" />
-                        </Image.InputBindings>
-                    </Image>
+                    <Button Margin="5" Command="{Binding DataContext.CardClickCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" 
+                            CommandParameter="{Binding}">
+                        <Image Source="{Binding ImagePath}" Stretch="UniformToFill" Height="120" Width="100" />
+                    </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!-- Text pentru a arăta timpul rămas -->
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="20" Text="{Binding TimerText}" />
-
         <!-- Buton pentru a începe un joc nou -->
-        <Button Content="New Game" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" Width="150" Height="50" Command="{Binding NewGameCommand}" />
+        <Button Grid.Row="2" Content="New Game" HorizontalAlignment="Left" Margin="124,10,0,20" 
+                Width="150" Height="40" Command="{Binding NewGameCommand}" />
+        <Button Grid.Row="2" Content="Exit" HorizontalAlignment="Left" Margin="518,10,0,20" 
+            Width="150" Height="40" Click="Exit_Click" />
     </Grid>
 </Window>

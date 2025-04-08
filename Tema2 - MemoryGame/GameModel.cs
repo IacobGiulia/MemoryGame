@@ -1,40 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Tema2___MemoryGame
 {
     public class GameModel
     {
-        public List<CardModel> Cards { get; set; }
-        public int TimeLeft { get; set; }
-        public bool IsGameOver { get; set; }
-        public int firstCardIndex = -1;
-        public int secondCardIndex = -1;
+        public ObservableCollection<CardModel> Cards { get; private set; }
+        public int TimeLeft { get; private set; }
+        public bool IsGameOver { get; private set; }
+        public bool IsGameWon { get; private set; }
+        private int firstCardIndex = -1;
+        private int secondCardIndex = -1;
 
         public event Action GameUpdated;
 
         public GameModel()
         {
-            Cards = new List<CardModel>();
-            TimeLeft = 60;  // Jocul începe cu 60 de secunde
+            Cards = new ObservableCollection<CardModel>();
+            TimeLeft = 60;
             IsGameOver = false;
+            IsGameWon = false;
         }
 
         public void StartNewGame(List<string> imagePaths)
         {
-            var shuffledPaths = imagePaths.Concat(imagePaths).OrderBy(x => Guid.NewGuid()).ToList();  // Amestecă imaginile
+            
+            var shuffledPaths = imagePaths.Concat(imagePaths).OrderBy(x => Guid.NewGuid()).ToList();
             Cards.Clear();
 
-            foreach (var path in shuffledPaths)
+            for (int i = 0; i < shuffledPaths.Count; i++)
             {
-                Cards.Add(new CardModel(path));
+                Cards.Add(new CardModel(shuffledPaths[i], i));
             }
 
-            TimeLeft = 60;  // Resetăm cronometrul
+            TimeLeft = 60;
             IsGameOver = false;
+            IsGameWon = false;
+            firstCardIndex = -1;
+            secondCardIndex = -1;
             NotifyGameUpdated();
         }
 
@@ -49,7 +58,7 @@ namespace Tema2___MemoryGame
             {
                 firstCardIndex = index;
             }
-            else if (secondCardIndex == -1)
+            else if (secondCardIndex == -1 && firstCardIndex != index)
             {
                 secondCardIndex = index;
                 CheckForMatch();
@@ -58,29 +67,40 @@ namespace Tema2___MemoryGame
 
         private void CheckForMatch()
         {
-            if (Cards[firstCardIndex].ImagePath == Cards[secondCardIndex].ImagePath)
+            if (Cards[firstCardIndex].ActualImagePath == Cards[secondCardIndex].ActualImagePath)
             {
                 Cards[firstCardIndex].IsMatched = true;
                 Cards[secondCardIndex].IsMatched = true;
+
+                if (Cards.All(card => card.IsMatched))
+                {
+                    IsGameWon = true;
+                    IsGameOver = true;
+                    NotifyGameUpdated();
+                }
             }
             else
             {
-                Task.Delay(500).ContinueWith(t =>
+                
+                var firstIndex = firstCardIndex;
+                var secondIndex = secondCardIndex;
+
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
                 {
-                    Cards[firstCardIndex].IsFaceUp = false;
-                    Cards[secondCardIndex].IsFaceUp = false;
-                    NotifyGameUpdated();
-                });
+                    Task.Delay(750).ContinueWith(t =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            Cards[firstIndex].IsFaceUp = false;
+                            Cards[secondIndex].IsFaceUp = false;
+                            NotifyGameUpdated();
+                        });
+                    });
+                }));
             }
 
             firstCardIndex = -1;
             secondCardIndex = -1;
-
-            if (Cards.All(card => card.IsMatched))
-            {
-                IsGameOver = true;
-                NotifyGameUpdated();
-            }
         }
 
         public void UpdateTimer()
@@ -91,6 +111,7 @@ namespace Tema2___MemoryGame
             if (TimeLeft <= 0)
             {
                 IsGameOver = true;
+                IsGameWon = false;
             }
             NotifyGameUpdated();
         }
@@ -99,5 +120,7 @@ namespace Tema2___MemoryGame
         {
             GameUpdated?.Invoke();
         }
+
     }
+
 }

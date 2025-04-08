@@ -20,26 +20,35 @@ namespace Tema2___MemoryGame
     public partial class GameWindow : Window
     {
         private GameViewModel _viewModel;
-        public GameWindow()
+        private UserModel currentUser;
+        public GameWindow(UserModel currentUser)
         {
             InitializeComponent();
-            _viewModel = (GameViewModel)this.DataContext;
+            _viewModel = new GameViewModel(currentUser);
+            this.DataContext = _viewModel;
         }
 
-        private void Card_Click(object sender, MouseButtonEventArgs e)
-        {
-            var clickedImage = sender as Image;
-            if (clickedImage != null)
-            {
-                var item = clickedImage.DataContext as CardModel;
-                int index = _viewModel.Cards.IndexOf(item); // Obținem indexul din lista de carduri
-                _viewModel.OnCardClicked(index); // Actualizăm jocul
-            }
-        }
+        //private void Card_Click(object sender, MouseButtonEventArgs e)
+        //{
+        //    var clickedImage = sender as Image;
+        //    if (clickedImage != null)
+        //    {
+        //        var item = clickedImage.DataContext as CardModel;
+        //        int index = _viewModel.Cards.IndexOf(item); // Obținem indexul din lista de carduri
+        //        _viewModel.OnCardClicked(index); // Actualizăm jocul
+        //    }
+        //}
 
         private void NewGame_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.StartNewGame(); // Pornește un joc nou
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            PlayWindow playWindow = new PlayWindow(currentUser);
+            playWindow.Show();
+            this.Close();
         }
     }
 }

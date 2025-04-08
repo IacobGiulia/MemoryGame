@@ -13,13 +13,13 @@
                 <MenuItem Header="New Game" Click="NewGameOption_Click" />
                 <MenuItem Header="Open Game" Command="{Binding SaveGameCommand}" />
                 <MenuItem Header="Save Game"/>
-                <MenuItem Header="Statistics"/>
+                <MenuItem Header="Statistics" Click="StatisticsOption_Click"/>
                 <MenuItem Header="Exit" Click="ExitOption_Click" />
                 
             </MenuItem>
             <MenuItem Header="Options">
-                <MenuItem Header="Standard (4x4)" Command="{Binding SetStandardGameCommand}" />
-                <MenuItem Header="Custom" Command="{Binding SetCustomGameCommand}" />
+                <MenuItem Header="Standard (4x4)"  Click="NewGameOption_Click"/>
+                <MenuItem Header="Custom"/>
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Click="AboutOption_Click" />

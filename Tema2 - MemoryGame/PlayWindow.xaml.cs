@@ -40,9 +40,32 @@ namespace Tema2___MemoryGame
 
         private void NewGameOption_Click(object sender, RoutedEventArgs e)
         {
-            GameWindow gameWindow = new GameWindow();
-            gameWindow.Show();
-            this.Close();
+            try
+            {
+                // Verifică dacă CurrentUser este null
+                if (CurrentUser == null)
+                {
+                    MessageBox.Show("CurrentUser este null!");
+                    return;
+                }
+
+                
+                GameWindow gameWindow = new GameWindow(CurrentUser);
+               
+                gameWindow.Show();
+                
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                // Afișează informații detaliate despre excepție
+                MessageBox.Show($"Error: {ex.Message}\n\nStack Trace: {ex.StackTrace}");
+            }
+        }
+        private void StatisticsOption_Click(object sender, RoutedEventArgs e)
+        {
+            var statisticsWindow = new Statistics();
+            statisticsWindow.ShowDialog();
         }
     }
     

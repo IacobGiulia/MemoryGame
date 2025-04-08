@@ -64,7 +64,7 @@ namespace Tema2___MemoryGame
         public void OpenNewUserWindow()
         {
             var window = new NewUserWindow();
-            window.UserAdded += (s, e) => LoadUsers(); // 🟢 ADĂUGĂ AICI
+            window.UserAdded += (s, e) => LoadUsers(); 
             window.DataContext = new NewUserViewModel(window);
             window.ShowDialog();
 
@@ -93,32 +93,6 @@ namespace Tema2___MemoryGame
             File.WriteAllText(UsersFile, json);
         }
 
-        //private void AddUser(object obj)
-        //{
-        //    OpenFileDialog openFileDialog = new()
-        //    {
-        //        Filter = "Image Files(*.jpg, *.png, *.gif) | *.jpg;*.png;*.gif",
-        //        Title = "Select an Image"
-        //    };
-
-        //    if (openFileDialog.ShowDialog() == true)
-        //    {
-        //        string fileName = Path.GetFileName(openFileDialog.FileName);
-        //        string newPath = Path.Combine("Images", fileName);
-
-        //        if (!Directory.Exists("Images"))
-        //            Directory.CreateDirectory("Images");
-
-        //        File.Copy(openFileDialog.FileName, newPath, true);
-
-        //        UserModel newUser = new() { Username = $"User{Users.Count + 1}", ImagePath = newPath };
-        //        Users.Add(newUser);
-        //        SaveUsers();
-        //    }
-
-
-
-        //}
 
         private void DeleteUser(object obj)
         {

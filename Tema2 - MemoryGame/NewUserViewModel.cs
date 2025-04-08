@@ -70,7 +70,7 @@ namespace Tema2___MemoryGame
         {
             try
             {
-                var user = new UserModel { Username = Username, ImagePath = ImagePath };
+                var user = new UserModel { Username = Username, ImagePath = ImagePath, GamesPlayed = 0, GamesWon = 0 };
                 var usersFile = "users.json";
                 var userList = new List<UserModel>();
 

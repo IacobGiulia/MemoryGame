@@ -28,7 +28,7 @@ public partial class MainWindow : Window
         var newUserWindow = new NewUserWindow();
         newUserWindow.UserAdded += (s, args) =>
         {
-            viewModel.LoadUsers(); // reîncarcă lista după ce se adaugă
+            viewModel.LoadUsers(); 
         };
         newUserWindow.ShowDialog();
     }
